@@ -9,26 +9,44 @@
 
 
   // - クイズアプリのデータ管理用オブジェクト
-    //   - currentIndex : 現在何問目のクイズに取り組んでいるのかをインデックス番号で保持する
+  //   - currentIndex : 現在何問目のクイズに取り組んでいるのかをインデックス番号で保持する
   //   - numberOfCorrects : 正答数を保持するう
 
   const quisData = {
     quizzes: [],         // クイズデータを保持する配列
     currentIndex: 0,     // 現在の問題のインデックス
-    numberOfCorrects: 0 , // 正答数
+    numberOfCorrects: 0, // 正答数
   };
 
+
+  var questionDOM = document.getElementById('question');
+  var answers = document.getElementById('answers');
+  // var answerArray=quisData.quizzes[0].correct_answer
+  // console.log(answerArray)
   // - 保持する情報
+  // var answerArray1 = quisData.quizzes[0].correct_answer;
+
   //   - quizzes : fetchで取得したクイズデータの配列(resutls)を保持する
   async function getQuizzes() {
+
     try {
       const response = await fetch(API_URL);
       const data = await response.json();
+
+
+
       quisData.quizzes = data.results;
       quisData.currentIndex = 0;
       quisData.numberOfCorrects = 0;
+
+
       console.log(quisData.quizzes);
-      console.log(quisData.quizzes[0].question);  // 修正が必要な部分
+
+      console.log(quisData.quizzes[0].question);
+
+      console.log(quisData.quizzes[0].correct_answer);
+      console.log(quisData.quizzes[0].incorrect_answers);
+
       return quisData;
     } catch (error) {
       console.error('取得失敗:', error);
@@ -36,31 +54,33 @@
     }
   }
   // getQuizzesを実行してクイズデータを取得
-  getQuizzes();
+  getQuizzes().then(() => {
+    questionDOM.textContent = quisData.quizzes[0].question;
+  });
 
+// answers
+// 取得したanswersをシャッフル
+// function answerShuffle(answerArray){
+// for(let i =(answerArray.length - 1); i >= 0; i--){
 
+//   let r =Math.floor(Math.random() * answer.length);
+//   let tmp =answerArray[i];
+//   answerArray[i]=answerArray[r];
+//   answerArray[r]=tmp;
+// }
 
+// return answerArray;
+// }
   // HTMLのid値がセットされているDOMを取得する
+
+
 
   // ページの読み込みが完了したらクイズ情報を取得する
 
-// 表示
-// quisData.quizzes.question=>{
-// var list = document.createElement('li');
-// list.innerHTML = question;
-// question.appendChild(list);
-// }
+  // console.log(quizData.question[0].incorrect_answers)
 
-quisData.quizzes.forEach((quiz, index) => {
-  var question = document.getElementById('question');
-  var answer = document.getElementById('answer');
 
-  // indexによって、対応する質問文を取得
-  var currentQuestion = quisData.quizzes[index].question;
 
-  // 質問文を表示する要素のinnerHTMLを更新
-  question.innerHTML = currentQuestion;
-});
 
   // 「Restart」ボタンをクリックしたら再度クイズデータを取得する
 
@@ -97,6 +117,9 @@ quisData.quizzes.forEach((quiz, index) => {
   //   - 無し
   // - 戻り値
   //   - 無し
+  // const setNextQuiz =>{
+
+  // }
 
 
   // finishQuiz関数を実装する
@@ -161,5 +184,7 @@ quisData.quizzes.forEach((quiz, index) => {
   //   - 文字列
   // - 戻り値
   //   - 文字列
+
+
 
 })();
